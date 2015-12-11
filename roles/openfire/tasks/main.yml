@@ -1,0 +1,7 @@
+---
+- name: download openfire
+  get_url: url=http://www.igniterealtime.org/downloadServlet?filename=openfire/openfire-3.10.3-1.i386.rpm dest=/usr/src
+
+- name: install openfire
+  yum: name=/usr/src/openfire-3.10.3-1.i386.rpm state=present
+  notify: service openfire

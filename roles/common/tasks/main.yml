@@ -1,0 +1,18 @@
+---
+- name: update distro
+  yum: name=* state=latest
+
+- name: install glibc x86 (for java)
+  yum: name=glibc.i686 state=present
+
+- name: firewalld rules
+  command: firewall-cmd --zone=public --permanent --add-port={{ item }}/tcp
+  with_items:
+    - 9090-9091
+    - 5222-5223
+    - 7777
+    - 7070
+    - 7443
+    - 3478-3479
+    - 5229
+  notify: restart firewalld

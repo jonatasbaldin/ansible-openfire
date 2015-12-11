@@ -1,0 +1,4 @@
+---
+- name: mariadb subrole
+  include: mariadb.yml
+  when: install_db

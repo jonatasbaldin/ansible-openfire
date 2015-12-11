@@ -1,0 +1,29 @@
+---
+- name: check if mysql db already exists
+  shell: "mysql -u root -p{{ mariadb_rootpass }} -e 'SHOW DATABASES;' | grep {{ dbname }}"
+  ignore_errors: yes
+  register: server_dbstatus
+
+- name: install mariadb
+  yum: name=mariadb-server,mariadb,MySQL-python state=present
+  notify: service mariadb
+
+- name: start mariadb
+  service: name=mariadb state=started
+
+- name: change mariadb root password
+  mysql_user: name=root password={{ mariadb_rootpass }} 
+
+- name: change my.cnf (for root password)
+  template: src=my.cnf.j2 dest=/root/.my.cnf owner=root group=root mode=0600
+
+- name: create mariadb database
+  mysql_db: name={{ dbname }} state=present
+
+- name: import  mariadb database
+  mysql_db: name={{ dbname }} state=import target=/opt/openfire/resources/database/openfire_mysql.sql
+  when: server_dbstatus.rc != 0
+
+- name: create mariadb user
+  mysql_user: name={{ dbuser }} password={{ dbpassword }} priv={{ dbname }}.*:ALL  state=present
+  notify: service mariadb

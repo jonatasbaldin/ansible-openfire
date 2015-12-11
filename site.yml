@@ -1,0 +1,8 @@
+---
+- name: Install Openfire
+  hosts: all
+
+  roles:
+    - common
+    - openfire
+    - db

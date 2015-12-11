@@ -1,0 +1,3 @@
+---
+- name: service openfire
+  service: name=openfire state=started enabled=yes

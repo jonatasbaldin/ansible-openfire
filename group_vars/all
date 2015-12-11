@@ -1,0 +1,6 @@
+# mariadb vars
+install_db: True
+dbname: openfire
+dbuser: openfire
+dbpassword: 123456A!
+mariadb_rootpass: 123456A!
